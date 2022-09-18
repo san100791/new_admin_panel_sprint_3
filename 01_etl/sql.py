@@ -3,7 +3,7 @@ SQL-запрос для выборки данных о фильмах
 """
 
 query_filmfork_ids = """
-    SELECT 
+    SELECT
         fw.id, 
         fw.title,
         fw.description,
@@ -17,7 +17,8 @@ query_filmfork_ids = """
                 )
             )
         ) AS persons,
-        array_agg(DISTINCT g.name) AS genres        
+        array_agg(DISTINCT g.name) AS genres,
+        fw.updated_at 
     FROM content.film_work AS fw
     LEFT JOIN content.person_film_work AS pfw
     ON pfw.film_work_id = fw.id
@@ -29,5 +30,5 @@ query_filmfork_ids = """
     ON g.id = gfw.genre_id
     WHERE GREATEST(fw.updated_at, g.updated_at, p.updated_at) > %s
     GROUP BY fw.id
-    ORDER BY fw.id
+    ORDER BY fw.updated_at
 """

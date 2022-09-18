@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 
-from data_classes import FilmworkStorage, Filmwork, Person
+from data_classes import Filmwork, Person
 
 
 @dataclass()
 class TransformerToES:
-    storage: FilmworkStorage = FilmworkStorage()
 
     def transform_data(self, data):
         """
@@ -15,11 +14,9 @@ class TransformerToES:
         :param data: данные, полученные SQL-запросом
         :return: преобразованные данные
         """
-        if self.storage:
-            self.storage.clear()
 
         for filmwork in data:
-            id, title, description, rating, persons, genres = filmwork
+            id, title, description, rating, persons, genres, updated_at = filmwork
             
             filmwork_ = Filmwork(
                 id=id,
@@ -41,5 +38,5 @@ class TransformerToES:
                          if person['person_role'] == 'writer']
             )
 
-            yield filmwork_
+            yield filmwork_, updated_at
 

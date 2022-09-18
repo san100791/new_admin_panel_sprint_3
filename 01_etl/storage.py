@@ -16,7 +16,7 @@ class JsonFileStorage:
         try:
             with open(self.file_path, "r") as readfile:
                 state = json.load(readfile)
-        except:
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
             state = {}
         return state
 
@@ -38,12 +38,8 @@ class State:
     def set_state(self, key: str, value: Any) -> None:
         # Установка состояния для определённого ключа
         self.state[key] = value
-        state = self.state
-        self.storage.save_state(state)
+        self.storage.save_state(self.state)
 
     def get_state(self, key: str) -> Any:
         # Получение состояния по определённому ключу
-        try:
-            return self.state.get(key)
-        except KeyError:
-            return None
+        return self.state.get(key)

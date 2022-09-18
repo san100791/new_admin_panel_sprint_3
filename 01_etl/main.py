@@ -2,6 +2,7 @@ from loader import PostgreLoader
 from transform import TransformerToES
 from saver import ESSaver
 from logger import log_to_file
+from config import SLEEP_TIME
 
 from time import sleep
 
@@ -23,7 +24,7 @@ def start_etl() -> None:
         if transformed_data:
             es_saver.save_to_es(transformed_data)
 
-        sleep(8)
+        sleep(SLEEP_TIME)
 
 
 if __name__ == '__main__':
